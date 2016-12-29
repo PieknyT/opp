@@ -113,8 +113,8 @@ $writer-> write($product1);
 $writer-> write($product2);
 
 
-//print "Autor     : ".$product1->getProducer()."\n";
-//print "Wykonawca : ".$product2->getProducer()."\n";
+print "Autor     : ".$product1->getProducer()."\n";
+print "Wykonawca : ".$product2->getProducer()."\n";
 
 
 
