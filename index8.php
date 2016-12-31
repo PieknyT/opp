@@ -1,20 +1,24 @@
 <?php
-// Dziedziczenie part 4 (wywołania metod przesłonietych)
+// Dziedziczenie part 2 (stosowanie dziedzicenia)
 
 
 class ShopProduct
 {
+    public $numPages;
+    public $playLength;
     public $title;
     public $producerMainName;
     public $producerFirstName;
     public $price;
 
-    function __construct($title, $firstName, $mainName, $price)
+    function __construct($title, $firstName, $mainName, $price, $numPages = 0, $playLength = 0)
     {
         $this->title             = $title;
         $this->producerFirstName = $firstName;
         $this->producerMainName  = $mainName;
         $this->price             = $price;
+        $this->numPages          = $numPages;
+        $this->playLength        = $playLength;
     }
 
     function getProducer()
@@ -34,14 +38,6 @@ class ShopProduct
 
 class CdProduct extends ShopProduct
 {
-    public $playLength;
-
-    function __construct($title, $firstName, $mainName, $price, $playLength)
-    {
-        parent::__construct($title, $firstName, $mainName, $price);
-        $this->playLength = $playLength;
-    }
-
     public function getPlayLength()
     {
         return $this->playLength;
@@ -59,14 +55,6 @@ class CdProduct extends ShopProduct
 
 class BookProduct extends ShopProduct
 {
-    public $numPages;
-
-    function __construct($title, $firstName, $mainName, $price, $numPages)
-    {
-        parent::__construct($title, $firstName, $mainName, $price);
-        $this->numPages = $numPages;
-    }
-
     public function getNumOfPages()
     {
         return $this->numPages;

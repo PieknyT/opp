@@ -1,5 +1,5 @@
 <?php
-// Dziedziczenie part 4 (wywołania metod przesłonietych)
+// Dziedziczenie part 3 (Dziedziczenie a konstruktory)
 
 
 class ShopProduct
