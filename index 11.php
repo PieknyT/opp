@@ -5,7 +5,7 @@
 <?php
 
 
-// Zarządzanie dostępem do klasy  (metody akcesory)
+// Zarządzanie dostępem do klasy - public, private, protected
 
 
 class ShopProduct
@@ -105,41 +105,17 @@ class BookProduct extends ShopProduct
     }
 }
 
-class ShopProductWriter
-{
-    private $products = array();
-
-    public function addProduct (ShopProduct $shopProduct)
-    {
-        $this->products[] = $shopProduct;
-    }
-
-    public function write()
-    {
-        $str = "";
-        foreach ($this->products as $shopProduct)
-        {
-            $str.="{$shopProduct->title}: ";
-            $str.= "{$shopProduct->getProducer()}";
-            $str.=" ({$shopProduct->getPrice()})\n";
-        }
-        print $str;
-    }
-}
-
-
 $product1 = new BookProduct("Moja Antonina", "Willa", "Carter", 59.99, 520);
+
 $product2 = new CdProduct("Exile on Coldharbour Lane", "The", "Alabama 3", 25.99, 18);
 
-
-$writer = new ShopProductWriter();
-$writer->addProduct($product1);
-$writer->write();
-$writer->addProduct($product2);
+$product1->setDiscount(5);
 $product2->setDiscount(10);
-$writer->write();
 
+print $product1->getSummaryLine()."\n cena: ".$product1->getPrice()."<br>";
+print $product2->getSummaryLine()."\n cena: ".$product2->getPrice()."<br>";
 
+print $product1->getPrice();
 
 
 

@@ -19,9 +19,7 @@ class CdProduct
         $this->playLength        = $playLength;
     }
 
-    /**
-     * @return count play lenght
-     */
+
     public function getPlayLength()
     {
         return $this->playLength;
@@ -61,9 +59,7 @@ class BookProduct
         $this->numPages          = $numPages;
     }
 
-    /**
-     * @return count of pages
-     */
+
     public function getNumOfPages()
     {
         return $this->numPages;
@@ -78,7 +74,7 @@ class BookProduct
     function getSummaryLine()
     {
         $base = "{$this->title} ({$this->producerMainName}, ";
-        $base = "{$this->producerFirstName} )";
+        $base.= "{$this->producerFirstName} )";
         $base.= " : liczba stron - {$this->numPages}";
         return $base;
     }
@@ -88,7 +84,7 @@ class ShopProductWriter
 {
     public function write($shopProduct)
     {
-        if(!($shopProduct instanceof CdProduct) && !($shopProduct instanceof BookProduct))  // czemu tak nnie || ?????????????????????????????????
+        if(!($shopProduct instanceof CdProduct) && !($shopProduct instanceof BookProduct))  // czemu tak  a nie || ?????????????????????????????????
         {
             die ("Przekazano obiekt niewłaściwego typu");
         }

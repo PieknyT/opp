@@ -1,11 +1,5 @@
-<head>
-    <link rel="stylesheet" type="text/css" href="style.css">
-</head>
-
 <?php
-
-
-// Zarządzanie dostępem do klasy  (metody akcesory)
+// Dziedziczenie part 4 (wywołania metod przesłonietych)
 
 
 class ShopProduct
@@ -13,8 +7,7 @@ class ShopProduct
     public $title;
     public $producerMainName;
     public $producerFirstName;
-    public $discount = 0;
-    protected $price;
+    public $price;
 
     function __construct($title, $firstName, $mainName, $price)
     {
@@ -32,21 +25,9 @@ class ShopProduct
 
     function getSummaryLine()
     {
-        $base = "{$this->title} ({$this->producerFirstName} {$this->producerMainName}) ";
+        $base = "{$this->title} ({$this->producerMainName}, ";
+        $base.= "{$this->producerFirstName} )";
         return $base;
-    }
-
-    public function setDiscount($num)
-    {
-        $this->discount = $num;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPrice()
-    {
-        return ($this->price - $this->discount);
     }
 
 }
@@ -68,8 +49,7 @@ class CdProduct extends ShopProduct
 
     function getSummaryLine()
     {
-        $base = "Płyta : ";
-        $base.= parent::getSummaryLine();
+        $base = parent::getSummaryLine();
         $base.= " : czas nagrania - {$this->playLength}";
         return $base;
     }
@@ -93,53 +73,18 @@ class BookProduct extends ShopProduct
 
     function getSummaryLine()
     {
-        $base = "Książka : ";
-        $base.= parent::getSummaryLine();
+        $base = parent::getSummaryLine();
         $base.= " : liczba stron - {$this->numPages}";
         return $base;
     }
-
-    public function getPrice()
-    {
-        return ($this->price);
-    }
 }
-
-class ShopProductWriter
-{
-    private $products = array();
-
-    public function addProduct (ShopProduct $shopProduct)
-    {
-        $this->products[] = $shopProduct;
-    }
-
-    public function write()
-    {
-        $str = "";
-        foreach ($this->products as $shopProduct)
-        {
-            $str.="{$shopProduct->title}: ";
-            $str.= "{$shopProduct->getProducer()}";
-            $str.=" ({$shopProduct->getPrice()})\n";
-        }
-        print $str;
-    }
-}
-
 
 $product1 = new BookProduct("Moja Antonina", "Willa", "Carter", 59.99, 520);
 $product2 = new CdProduct("Exile on Coldharbour Lane", "The", "Alabama 3", 25.99, 18);
 
 
-$writer = new ShopProductWriter();
-$writer->addProduct($product1);
-$writer->write();
-$writer->addProduct($product2);
-$product2->setDiscount(10);
-$writer->write();
-
-
+print "Autor     : ".$product1->getProducer()."\n";
+print "Wykonawca : ".$product2->getProducer()."\n";
 
 
 
