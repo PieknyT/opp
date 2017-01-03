@@ -22,7 +22,7 @@ class ShopProduct
     }
 
     /**
-     * @return count of pages
+     * @return int
      */
     public function getNumOfPages()
     {
@@ -30,7 +30,7 @@ class ShopProduct
     }
 
     /**
-     * @return count play lenght
+     * @return int
      */
     public function getPlayLength()
     {
@@ -46,7 +46,7 @@ class ShopProduct
     function getSummaryLine()
     {
         $base = "{$this->title} ({$this->producerMainName}, ";
-        $base = "{$this->producerFirstName} )";
+        $base.= "{$this->producerFirstName} )";
         return $base;
     }
 }
