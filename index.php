@@ -5,18 +5,18 @@
 <?php
 
 
-// Zarządzanie dostępem do klasy  (metody akcesory)
+// Zarządzanie dostępem do klasy  (Klasy hierarchii ShopProduct)
 
 
 class ShopProduct
 {
-    public $title;
-    public $producerMainName;
-    public $producerFirstName;
-    public $discount = 0;
+    private $title;
+    private $producerMainName;
+    private $producerFirstName;
     protected $price;
+    private $discount = 0;
 
-    function __construct($title, $firstName, $mainName, $price)
+    public function __construct($title, $firstName, $mainName, $price)
     {
         $this->title             = $title;
         $this->producerFirstName = $firstName;
@@ -24,21 +24,44 @@ class ShopProduct
         $this->price             = $price;
     }
 
-    function getProducer()
+    /**
+     * @return string
+     */
+    public function getProducerFirstName()
     {
-        return "{$this->producerFirstName} ".
-               "{$this->producerMainName}";
+        return $this->producerFirstName;
     }
 
-    function getSummaryLine()
+    /**
+     * @return string
+     */
+    public function getProducerMainName()
     {
-        $base = "{$this->title} ({$this->producerFirstName} {$this->producerMainName}) ";
-        return $base;
+        return $this->producerMainName;
     }
 
-    public function setDiscount($num)
+    /**
+     * @param int $discount
+     */
+    public function setDiscount($discount)
     {
-        $this->discount = $num;
+        $this->discount = $discount;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDiscount()
+    {
+        return $this->discount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTitle()
+    {
+        return $this->title;
     }
 
     /**
@@ -49,61 +72,77 @@ class ShopProduct
         return ($this->price - $this->discount);
     }
 
+    public function getProducer()
+    {
+        return "{$this->producerFirstName}"."{$this->producerMainName}";
+    }
+
+    public function getSummaryLine()
+    {
+        $base = "{$this->title}({$this->producerMainName}, ";
+        $base.= "{$this->producerFirstName})";
+        return $base;
+    }
 }
 
 class CdProduct extends ShopProduct
 {
-    public $playLength;
+    private $playLength = 0;
 
-    function __construct($title, $firstName, $mainName, $price, $playLength)
+    public function __construct($title, $firstName, $mainName, $price, $playLenght)
     {
         parent::__construct($title, $firstName, $mainName, $price);
-        $this->playLength = $playLength;
+        $this->playLength = $playLenght;
     }
 
+    /**
+     * @return int
+     */
     public function getPlayLength()
     {
         return $this->playLength;
     }
 
-    function getSummaryLine()
+    public function getSummaryLine()
     {
-        $base = "Płyta : ";
-        $base.= parent::getSummaryLine();
-        $base.= " : czas nagrania - {$this->playLength}";
+        $base = parent::getSummaryLine();
+        $base.= ": czas nagrania - {$this->playLength}";
         return $base;
     }
-
 }
 
 class BookProduct extends ShopProduct
 {
-    public $numPages;
+    private $numPages;
 
-    function __construct($title, $firstName, $mainName, $price, $numPages)
+    public function __construct($title, $firstName, $mainName, $price, $numPage)
     {
         parent::__construct($title, $firstName, $mainName, $price);
-        $this->numPages = $numPages;
+        $this->numPages = $numPage;
     }
 
+    /**
+     * @return int
+     */
     public function getNumOfPages()
     {
         return $this->numPages;
     }
 
-    function getSummaryLine()
+    public function getSummaryLine()
     {
-        $base = "Książka : ";
-        $base.= parent::getSummaryLine();
-        $base.= " : liczba stron - {$this->numPages}";
+        $base = parent::getSummaryLine();
+        $base.= " : liczba stron - {$this->getNumOfPages()}";
         return $base;
     }
 
     public function getPrice()
     {
-        return ($this->price);
+        return $this->price;
     }
+
 }
+
 
 class ShopProductWriter
 {
@@ -119,13 +158,14 @@ class ShopProductWriter
         $str = "";
         foreach ($this->products as $shopProduct)
         {
-            $str.="{$shopProduct->title}: ";
+            $str.="{$shopProduct->getTitle()}: ";
             $str.= "{$shopProduct->getProducer()}";
-            $str.=" ({$shopProduct->getPrice()})\n";
+            $str.=" ({$shopProduct->getPrice()})\n"."<br>";
         }
         print $str;
     }
 }
+
 
 
 $product1 = new BookProduct("Moja Antonina", "Willa", "Carter", 59.99, 520);
@@ -138,19 +178,8 @@ $writer->write();
 $writer->addProduct($product2);
 $product2->setDiscount(10);
 $writer->write();
-
-
-
-
-
-
-
-
-
-
-
-
-
+$product2->setDiscount(5);
+$writer->write();
 
 
 
