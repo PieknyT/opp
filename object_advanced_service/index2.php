@@ -1,10 +1,10 @@
 <head>
-    <link rel="stylesheet" type="text/css" href="./style.css">
+    <link rel="stylesheet" type="text/css" href="../style.css">
     <meta charset = utf8-polish-ci"/>
 </head>
 
 <?php
-// Zawansowana obsługa obiektów   (składowwe stałe)
+// Zawansowana obsługa obiektów   (metody i składowwe statyczne)
 
 class ShopProduct
 {
