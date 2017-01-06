@@ -179,9 +179,6 @@ class CdProduct extends ShopProduct
         $this->playLength = $playLenght;
     }
 
-    /**
-     * @return int
-     */
     public function getPlayLength()
     {
         return $this->playLength;
