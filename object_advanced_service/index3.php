@@ -1,13 +1,17 @@
 <head>
-    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link rel="stylesheet" type="text/css" href="./style.css">
     <meta charset = utf8-polish-ci"/>
 </head>
 
 <?php
-// Zawansowana obsługa obiektów   (metody i składowwe statyczne)
+// Zawansowana obsługa obiektów   (składowwe stałe)
 
 class ShopProduct
 {
+    const AVAILABLE      = 0;
+    const OUT_OF_STOCK   = 1;
+    const INSCRIPTION    = "kartoflisko";
+    const TOTAL_DISCOUNT = 5.9;
     private $id;
     private $title;
     private $producerMainName;
@@ -211,23 +215,18 @@ class ShopProductWriter
     }
 }
 
-
-
 //doing
 
-$hostname = 'localhost';
+print ShopProduct::AVAILABLE."<br>";
+print ShopProduct::OUT_OF_STOCK."<br>";
+print ShopProduct::INSCRIPTION."<br>";
+print ShopProduct::TOTAL_DISCOUNT."<br>";
 
-$dsn = "mysql:host=$hostname;dbname=own;encoding=utf8_polish_ci";
-$pdo = new PDO($dsn, 'root', null);
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$writer = new ShopProductWriter();
 
-for ($x = 1; $x <= 7; $x++)
-{
-    $writer->addProduct(ShopProduct::getInstance($x, $pdo));
-}
 
-$writer->write();
+
+
+
 
 
 

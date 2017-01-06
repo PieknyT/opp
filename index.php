@@ -4,10 +4,14 @@
 </head>
 
 <?php
-// Zawansowana obsługa obiektów   (składowwe stałe)
+// Zawansowana obsługa obiektów   (Interfejsy)
 
 class ShopProduct
 {
+    const AVAILABLE      = 0;
+    const OUT_OF_STOCK   = 1;
+    const INSCRIPTION    = "kartoflisko";
+    const TOTAL_DISCOUNT = 5.9;
     private $id;
     private $title;
     private $producerMainName;
@@ -184,28 +188,70 @@ class BookProduct extends ShopProduct
 
     public function getPrice()
     {
-        return $this->price;
+        return $this->price - ShopProduct::TOTAL_DISCOUNT ;
     }
 
 }
 
-class ShopProductWriter
+abstract class ShopProductWriter
 {
-    private $products = array();
+    protected $products = array();
 
     public function addProduct (ShopProduct $shopProduct)
     {
         $this->products[] = $shopProduct;
     }
 
+   abstract protected function write();
+
+//        $str = "";
+//        foreach ($this->products as $shopProduct)
+//        {
+//            $str.="{$shopProduct->getTitle()}:\n";
+//            $str.= "{$shopProduct->getProducer()}\n";
+//            $str.=" ({$shopProduct->getPrice()})\n"."<br>";
+//        }
+//        print $str;
+
+}
+
+class ErroredWriter extends ShopProductWriter
+{
+   public function write()
+   {
+
+   }
+
+}
+
+class XmlProductWriter extends ShopProductWriter
+{
     public function write()
     {
-        $str = "";
+        $str = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+        $str.= "<products>\n";
         foreach ($this->products as $shopProduct)
         {
-            $str.="{$shopProduct->getTitle()}:\n";
-            $str.= "{$shopProduct->getProducer()}\n";
-            $str.=" ({$shopProduct->getPrice()})\n"."<br>";
+            $str.= "\t<product title=\"{$shopProduct->getTitle()}\"\n";
+            $str.= "\t\t<summary>\n";
+            $str.= "\t\t{$shopProduct->getSummaryLine()}\n";
+            $str.= "\t\t</summary>\n";
+            $str.= "\t\t</product>\n"."<br>";
+        }
+        $str.= "</products>\n";
+        print $str;
+    }
+}
+
+
+class TextProductWriter extends ShopProductWriter
+{
+    public function write()
+    {
+        $str = "PRODUCTS:\n";
+        foreach ($this->products as $shopProduct)
+        {
+            $str.= $shopProduct->getSummaryLine()."\n"."<br>";
         }
         print $str;
     }
@@ -215,11 +261,12 @@ class ShopProductWriter
 
 //doing
 
-$hostname = 'localhost';
 
-$dsn = "mysql:host=$hostname;dbname=own;encoding=utf8_polish_ci";
-$pdo = new PDO($dsn, 'root', null);
-$writer = new ShopProductWriter();
+$hostname = 'localhost';
+$dsn      = "mysql:host=$hostname;dbname=own;encoding=utf8_polish_ci";
+$pdo      = new PDO($dsn, 'root', null);
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$writer = new TextProductWriter();
 
 for ($x = 1; $x <= 7; $x++)
 {
@@ -228,6 +275,14 @@ for ($x = 1; $x <= 7; $x++)
 
 $writer->write();
 
+
+
+
+
+//print ShopProduct::AVAILABLE."<br>";
+//print ShopProduct::OUT_OF_STOCK."<br>";
+//print ShopProduct::INSCRIPTION."<br>";
+//print ShopProduct::TOTAL_DISCOUNT."<br>";
 
 
 
