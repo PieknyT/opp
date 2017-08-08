@@ -1,18 +1,19 @@
 <head>
     <link rel="stylesheet" type="text/css" href="../style.css">
-    <meta charset = utf8-polish-ci"/>
+    <meta charset=utf8-polish-ci"/>
 </head>
 
 <?php
-// Zawansowana obsługa obiektów   (metody i składowwe statyczne)
+
+// Zawansowana obsługa obiektów   (Reflection API)
 
 class ShopProduct
 {
-    private $id;
-    private $title;
-    private $producerMainName;
-    private $producerFirstName;
-    private $discount = 0;
+    private   $id;
+    private   $title;
+    private   $producerMainName;
+    private   $producerFirstName;
+    private   $discount = 0;
     protected $price;
 
     public function __construct($title, $firstName, $mainName, $price)
@@ -78,13 +79,13 @@ class ShopProduct
 
     public function getProducer()
     {
-        return "{$this->producerFirstName} "."{$this->producerMainName}";
+        return "{$this->producerFirstName} " . "{$this->producerMainName}";
     }
 
     public function getSummaryLine()
     {
         $base = "{$this->title}({$this->producerMainName}, ";
-        $base.= "{$this->producerFirstName})";
+        $base .= "{$this->producerFirstName})";
         return $base;
     }
 
@@ -94,33 +95,30 @@ class ShopProduct
         $result = $stmt->execute(array($id));
         $row    = $stmt->fetch();
 
-        if (empty($row)) {return null;}
+        if (empty($row)) {
+            return null;
+        }
 
-        if($row['type'] == "book")
-        {
+        if ($row['type'] == "book") {
             $product = new BookProduct(
-                                $row['title'],
-                                $row['firstname'],
-                                $row['mainname'],
-                                $row['price'],
-                                $row['numpages']);
-        }
-        elseif ($row['type'] == "cd")
-        {
+                $row['title'],
+                $row['firstname'],
+                $row['mainname'],
+                $row['price'],
+                $row['numpages']);
+        } elseif ($row['type'] == "cd") {
             $product = new CdProduct(
-                                $row['title'],
-                                $row['firstname'],
-                                $row['mainname'],
-                                $row['price'],
-                                $row['playlenght']);
-        }
-        else
-        {
+                $row['title'],
+                $row['firstname'],
+                $row['mainname'],
+                $row['price'],
+                $row['playlenght']);
+        } else {
             $product = new ShopProduct(
-                                $row['title'],
-                                $row['firstname'],
-                                $row['mainname'],
-                                $row['price']);
+                $row['title'],
+                $row['firstname'],
+                $row['mainname'],
+                $row['price']);
         }
 
         $product->setID($row['product_id']);
@@ -152,7 +150,7 @@ class CdProduct extends ShopProduct
     public function getSummaryLine()
     {
         $base = parent::getSummaryLine();
-        $base.= ": czas nagrania - {$this->playLength}";
+        $base .= ": czas nagrania - {$this->playLength}";
         return $base;
     }
 }
@@ -178,7 +176,7 @@ class BookProduct extends ShopProduct
     public function getSummaryLine()
     {
         $base = parent::getSummaryLine();
-        $base.= " : liczba stron - {$this->getNumOfPages()}";
+        $base .= " : liczba stron - {$this->getNumOfPages()}";
         return $base;
     }
 
@@ -193,7 +191,7 @@ class ShopProductWriter
 {
     private $products = array();
 
-    public function addProduct (ShopProduct $shopProduct)
+    public function addProduct(ShopProduct $shopProduct)
     {
         $this->products[] = $shopProduct;
     }
@@ -201,16 +199,14 @@ class ShopProductWriter
     public function write()
     {
         $str = "";
-        foreach ($this->products as $shopProduct)
-        {
-            $str.="{$shopProduct->getTitle()}:\n";
-            $str.= "{$shopProduct->getProducer()}\n";
-            $str.=" ({$shopProduct->getPrice()})\n"."<br>";
+        foreach ($this->products as $shopProduct) {
+            $str .= "{$shopProduct->getTitle()}:\n";
+            $str .= "{$shopProduct->getProducer()}\n";
+            $str .= " ({$shopProduct->getPrice()})\n" . "<br>";
         }
         print $str;
     }
 }
-
 
 
 //doing
@@ -222,14 +218,16 @@ $pdo = new PDO($dsn, 'root', null);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $writer = new ShopProductWriter();
 
-for ($x = 1; $x <= 8; $x++)
-{
+for ($x = 1; $x <= 8; $x++) {
     $writer->addProduct(ShopProduct::getInstance($x, $pdo));
 }
 
-$writer->write();
+//$writer->write();
 
+//Reflection API
 
+$prod_class = new ReflectionClass('BookProduct');
+Reflection::export($prod_class);
 
 
 
