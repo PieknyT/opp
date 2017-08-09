@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <conf>
     <item name="user">bob</item>
-    <item name="pass">newpass</item>
+    <item name="pass">bigmanymany</item>
     <item name="host">localhost</item>
     <item name="localization">Krosno</item>
     <item name="login">karamba</item>

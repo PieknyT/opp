@@ -1,5 +1,7 @@
 <?php
 
+require_once(dirname(__FILE__) . "/exceptionSpecial.php");
+
 class Conf
 {
     public $file;
@@ -9,11 +11,34 @@ class Conf
     function __construct($file)
     {
         $this->file = $file;
-        $this->xml = simplexml_load_file($file);
+        if(!file_exists($file))
+        {
+            throw new FileException("File '$file' not exist");
+        }
+
+        $this->xml = simplexml_load_file($file, null, LIBXML_NOERROR);
+        if(! is_object($this->xml))
+        {
+            throw new XmlException(libxml_get_last_error());
+        }
+
+        print gettype($this->xml);
+        print "<br>";
+        $matches = $this->xml->xpath("/conf");
+        if (! count($matches))
+        {
+            throw new ConfException("cant find element: conf");
+        }
+
     }
 
     function write()
     {
+        if(! is_writeable($this->file))
+        {
+            throw new FileException("File '$this->file' can not write");
+
+        }
         file_put_contents($this->file, $this->xml->asXML());
     }
 
@@ -42,22 +67,3 @@ class Conf
 
 }
 
-$path = "./config.xml";
-
-$newTest = new Conf($path);
-
-
-print_r($newTest->file);
-
-
-print_r($newTest);
-
-print_r($newTest->get("user"));
-
-$newTest->set("localization", "Krosno");
-$newTest->set("login", "karamba");
-
-
-print_r($newTest->get("localization"));
-$newTest->write();
-//print_r($newTest);
